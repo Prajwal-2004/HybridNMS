@@ -1,37 +1,26 @@
+version: "3.9"
+
 services:
-  influxdb:
-    image: influxdb:2.7
-    container_name: influxdb
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
     ports:
-      - "8086:8086"
-    volumes:
-      - influxdb-data:/var/lib/influxdb2
-    environment:
-      - DOCKER_INFLUXDB_INIT_MODE=setup
-      - DOCKER_INFLUXDB_INIT_USERNAME=prajwal
-      - DOCKER_INFLUXDB_INIT_PASSWORD=Monkeydluffy@2004
-      - DOCKER_INFLUXDB_INIT_ORG=HybridNMS
-      - DOCKER_INFLUXDB_INIT_BUCKET=telegraf
-      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=nJ8LgtuLDiD8oyc_RhrUF0KMW_icCEWVzgL9CIyaIn_matg8GAjtdkWARcN_5jFwkMq5xdoMCEOc4VbbjK8Z9A==
+      - "9090:9090"
 
-
-  telegraf:
-    image: telegraf:latest
-    container_name: telegraf
-    depends_on:
-      - influxdb
-    volumes:
-      - ./projects/telegraf.conf:/etc/telegraf/telegraf.conf:ro
-    environment:
-      - INFLUX_TOKEN=your_generated_token_here
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    ports:
+      - "9100:9100"
+    restart: unless-stopped
 
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
     ports:
       - "3000:3000"
-    depends_on:
-      - influxdb
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
@@ -39,5 +28,4 @@ services:
       - grafana-data:/var/lib/grafana
 
 volumes:
-  influxdb-data:
   grafana-data:
