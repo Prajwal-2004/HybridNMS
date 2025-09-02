@@ -1,4 +1,3 @@
-version: '3.8'
 services:
   influxdb:
     image: influxdb:2.7
@@ -6,38 +5,39 @@ services:
     ports:
       - "8086:8086"
     volumes:
-      - D:/HybridNMS/docker-data/influxdb:/var/lib/influxdb2
-
-  grafana:
-    image: grafana/grafana:latest
-    container_name: grafana
-    ports:
-      - "3000:3000"
-    volumes:
-      - D:/HybridNMS/docker-data/grafana:/var/lib/grafana
-
-  zookeeper:
-    image: wurstmeister/zookeeper
-    container_name: zookeeper
-    ports:
-      - "2181:2181"
-
-  kafka:
-    image: wurstmeister/kafka
-    container_name: kafka
-    ports:
-      - "9092:9092"
+      - influxdb-data:/var/lib/influxdb2
     environment:
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-    volumes:
-      - D:/HybridNMS/docker-data/kafka:/kafka
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=prajwal
+      - DOCKER_INFLUXDB_INIT_PASSWORD=Monkeydluffy@2004
+      - DOCKER_INFLUXDB_INIT_ORG=HybridNMS
+      - DOCKER_INFLUXDB_INIT_BUCKET=telegraf
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=nJ8LgtuLDiD8oyc_RhrUF0KMW_icCEWVzgL9CIyaIn_matg8GAjtdkWARcN_5jFwkMq5xdoMCEOc4VbbjK8Z9A==
+
 
   telegraf:
     image: telegraf:latest
     container_name: telegraf
     depends_on:
       - influxdb
-      - kafka
     volumes:
-      - D:/HybridNMS/projects/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - ./projects/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    environment:
+      - INFLUX_TOKEN=your_generated_token_here
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    depends_on:
+      - influxdb
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana-data:/var/lib/grafana
+
+volumes:
+  influxdb-data:
+  grafana-data:
