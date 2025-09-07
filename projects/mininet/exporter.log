@@ -1,0 +1,16 @@
+nohup: ignoring input
+Traceback (most recent call last):
+  File "/mnt/d/HybridNMS/projects/mininet/mininet_exporter.py", line 74, in <module>
+    main()
+  File "/mnt/d/HybridNMS/projects/mininet/mininet_exporter.py", line 41, in main
+    c0 = net.addController('c0')
+  File "/usr/lib/python3/dist-packages/mininet/net.py", line 291, in addController
+    controller_new = controller( name, **params )
+  File "/usr/lib/python3/dist-packages/mininet/node.py", line 1417, in __init__
+    self.checkListening()
+  File "/usr/lib/python3/dist-packages/mininet/node.py", line 1433, in checkListening
+    raise Exception( "Please shut down the controller which is"
+Exception: Please shut down the controller which is running on port 6653:
+Active Internet connections (servers and established)
+tcp        0      0 0.0.0.0:6653            0.0.0.0:*               LISTEN      334/ovs-testcontrol 
+tcp        0      0 127.0.0.1:52676         127.0.0.1:6653          TIME_WAIT   -                   
