@@ -51,3 +51,4 @@ projects/venv/bin/python
 projects/venv/bin/python3
 projects/venv/bin/python3.10
 projects/venv/bin/tqdm
+datasets/cisco-telemetry/
