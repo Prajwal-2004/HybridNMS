@@ -1,0 +1,7 @@
+name: qos_adjust
+description: Adjust QoS to prioritize traffic
+conditions:
+  packet_loss_percent: "> 2"
+actions:
+  - command: "adjust qos for {src_host}->{dst_host}"
+  - log: "QoS adjusted for high packet loss"

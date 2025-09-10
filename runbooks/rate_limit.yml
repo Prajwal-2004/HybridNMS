@@ -1,0 +1,7 @@
+name: rate_limit
+description: Apply rate limiting for congestion
+conditions:
+  throughput_mbps: "> 90"
+actions:
+  - command: "limit rate for {src_host}->{dst_host}"
+  - log: "Rate limiting applied due to high throughput"

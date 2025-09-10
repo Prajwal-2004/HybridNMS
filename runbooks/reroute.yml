@@ -1,0 +1,7 @@
+name: reroute
+description: Reroute traffic to reduce latency
+conditions:
+  latency_ms: "> 50"
+actions:
+  - command: "reroute link from {src_host} to {dst_host}"
+  - log: "Rerouted {src_host}->{dst_host} due to high latency"
